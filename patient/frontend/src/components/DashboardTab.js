@@ -33,22 +33,26 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
   // Fetch Doctor Prescribed Diet, Prescriptions & Alarms
   const fetchDoctorPrescriptions = async () => {
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/patient/diet-prescription", {
+      const res = await fetch(`${API_BASE}/api/patient/diet-prescription`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      if (data.weeklyDietPlan) setWeeklyDietPlan(data.weeklyDietPlan);
-      if (data.prescriptions) setPrescriptions(data.prescriptions);
-      if (data.deviceAlarms && data.deviceAlarms.length > 0) {
-        setDeviceAlarms(data.deviceAlarms);
-        const activeAlarm = data.deviceAlarms.find(a => a.active);
-        if (activeAlarm) {
-          setRingingAlarmLabel(activeAlarm.label || `Medication Alarm Scheduled for ${activeAlarm.alarmTime}`);
-          setAlarmRinging(true);
-          playRingingAlarmSound();
-          setTimeout(playRingingAlarmSound, 500);
-          setTimeout(playRingingAlarmSound, 1000);
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.weeklyDietPlan) setWeeklyDietPlan(data.weeklyDietPlan);
+        if (data.prescriptions) setPrescriptions(data.prescriptions);
+        if (data.deviceAlarms && data.deviceAlarms.length > 0) {
+          setDeviceAlarms(data.deviceAlarms);
+          const activeAlarm = data.deviceAlarms.find(a => a.active);
+          if (activeAlarm) {
+            setRingingAlarmLabel(activeAlarm.label || `Medication Alarm Scheduled for ${activeAlarm.alarmTime}`);
+            setAlarmRinging(true);
+            playRingingAlarmSound();
+            setTimeout(playRingingAlarmSound, 500);
+            setTimeout(playRingingAlarmSound, 1000);
+          }
         }
       }
     } catch (err) {
@@ -58,12 +62,16 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
 
   const fetchAppointments = async () => {
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/patient/appointments", {
+      const res = await fetch(`${API_BASE}/api/patient/appointments`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      setAppointments(data.appointments || []);
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const data = await res.json();
+        setAppointments(data.appointments || []);
+      }
     } catch (err) {
       console.error("Fetch appointments error:", err);
     }

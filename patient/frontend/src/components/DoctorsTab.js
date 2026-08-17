@@ -114,10 +114,14 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
   const fetchDoctors = async () => {
     setLoading(true);
     try {
-      const url = `/api/doctors?specialty=${encodeURIComponent(selectedSpecialty)}&query=${encodeURIComponent(searchQuery)}&sortBy=${sortBy}`;
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const url = `${API_BASE}/api/doctors?specialty=${encodeURIComponent(selectedSpecialty)}&query=${encodeURIComponent(searchQuery)}&sortBy=${sortBy}`;
       const res = await fetch(url);
-      const data = await res.json();
-      if (data.doctors) setDoctors(data.doctors);
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.doctors) setDoctors(data.doctors);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -130,15 +134,19 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
   const handleStartConsultation = async (doc) => {
     const token = localStorage.getItem("medico_token");
     try {
-      const res = await fetch(`/api/doctors/${doc.id || doc._id}/consult`, {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const res = await fetch(`${API_BASE}/api/doctors/${doc.id || doc._id}/consult`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      if (res.ok) {
-        setConsultSuccess(data.consultation);
-      } else {
-        alert(data.error || "Failed to launch consultation.");
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (res.ok) {
+          setConsultSuccess(data.consultation);
+        } else {
+          alert(data.error || "Failed to launch consultation.");
+        }
       }
     } catch (err) {
       alert(err.message);
@@ -152,7 +160,8 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
     let parsedUser = null;
     try { if (userStr) parsedUser = JSON.parse(userStr); } catch {}
     try {
-      const res = await fetch("/api/appointments/book", {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const res = await fetch(`${API_BASE}/api/appointments/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -167,18 +176,21 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
           slotTime: selectedSlot
         })
       });
-      const data = await res.json();
-      if (res.ok || data.appointment) {
-        setBookingSuccess({
-          id: data.appointment?.id || data.appointment?._id || `app_${Date.now()}`,
-          date: selectedDate,
-          slot: selectedSlot,
-          doctorName: bookModalDoc.name,
-          specialty: bookModalDoc.specialty,
-          hospital: bookModalDoc.workplaceHospital
-        });
-      } else {
-        alert(data.error || "Booking failed.");
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (res.ok || data.appointment) {
+          setBookingSuccess({
+            id: data.appointment?.id || data.appointment?._id || `app_${Date.now()}`,
+            date: selectedDate,
+            slot: selectedSlot,
+            doctorName: bookModalDoc.name,
+            specialty: bookModalDoc.specialty,
+            hospital: bookModalDoc.workplaceHospital
+          });
+        } else {
+          alert(data.error || "Booking failed.");
+        }
       }
     } catch (err) {
       alert(err.message);

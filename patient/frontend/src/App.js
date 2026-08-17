@@ -27,8 +27,10 @@ export default function App() {
   useEffect(() => {
     async function fetchLocation() {
       try {
-        const res = await fetch("/api/user/location");
-        if (res.ok) {
+        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+        const res = await fetch(`${API_BASE}/api/user/location`);
+        const contentType = res.headers.get("content-type") || "";
+        if (res.ok && contentType.includes("application/json")) {
           const data = await res.json();
           if (data.queryLocation) setUserLocation(data.queryLocation);
         }

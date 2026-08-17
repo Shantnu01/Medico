@@ -14,14 +14,17 @@ export function ConsultationHistoryTab({ onNavigateToDoctors }) {
   const fetchConsultationHistory = async () => {
     setLoading(true);
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
       const [resConsult, resFiles] = await Promise.all([
-        fetch("/api/patient/consultations", { headers: { Authorization: `Bearer ${token}` } }),
-        fetch("/api/patient/medical-history-files", { headers: { Authorization: `Bearer ${token}` } })
+        fetch(`${API_BASE}/api/patient/consultations`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${API_BASE}/api/patient/medical-history-files`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
       
-      const dataConsult = await resConsult.json();
-      const dataFiles = await resFiles.json();
+      const contentTypeConsult = resConsult.headers.get("content-type") || "";
+      const contentTypeFiles = resFiles.headers.get("content-type") || "";
+      const dataConsult = (resConsult.ok && contentTypeConsult.includes("application/json")) ? await resConsult.json() : {};
+      const dataFiles = (resFiles.ok && contentTypeFiles.includes("application/json")) ? await resFiles.json() : {};
 
       setConsultations(dataConsult.consultations || []);
       setHistoryFiles(dataFiles.files || []);
@@ -39,14 +42,18 @@ export function ConsultationHistoryTab({ onNavigateToDoctors }) {
   const handleAiSummarize = async () => {
     setSummarizing(true);
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/ai/summarize-medical-history", {
+      const res = await fetch(`${API_BASE}/api/ai/summarize-medical-history`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ patientId: token })
       });
-      const data = await res.json();
-      setAiSummary(data);
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        setAiSummary(data);
+      }
     } catch (e) {
       alert("Failed to generate AI summary.");
     } finally {

@@ -21,10 +21,14 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
   useEffect(() => {
     async function fetchRegionalDiseases() {
       try {
-        const res = await fetch(`/api/regional-diseases?location=${encodeURIComponent(userLocation)}`);
-        if (res.ok) {
+        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+        const res = await fetch(`${API_BASE}/api/regional-diseases?location=${encodeURIComponent(userLocation)}`);
+        const contentType = res.headers.get("content-type") || "";
+        if (res.ok && contentType.includes("application/json")) {
           const data = await res.json();
-          setRegionalDiseases(data.common_diseases || []);
+          if (data.common_diseases && Array.isArray(data.common_diseases)) {
+            setRegionalDiseases(data.common_diseases);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch regional diseases:", err);
@@ -42,7 +46,8 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
     setResult(null);
 
     try {
-      const res = await fetch("/api/predict", {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const res = await fetch(`${API_BASE}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -52,7 +57,15 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
         })
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        await res.text();
+        throw new Error(`AI prediction server returned status ${res.status}. Please check backend server connection.`);
+      }
+
       if (!res.ok) {
         throw new Error(data.detail?.message || data.error || "Failed to analyze symptoms.");
       }

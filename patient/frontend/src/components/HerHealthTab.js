@@ -126,16 +126,20 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
   const fetchCycleData = async () => {
     setLoadingData(true);
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/patient/cycle-log", {
+      const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      setLogs(data.logs || []);
-      setPrediction(data.prediction || null);
-      if (data.pcosScreening) setScreeningResult(data.pcosScreening);
-      if (data.logs?.length > 0) {
-        setCurrentPhase(calculateCurrentPhase(data.logs[0].startDate, data.logs[0].cycleLength));
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const data = await res.json();
+        setLogs(data.logs || []);
+        setPrediction(data.prediction || null);
+        if (data.pcosScreening) setScreeningResult(data.pcosScreening);
+        if (data.logs?.length > 0) {
+          setCurrentPhase(calculateCurrentPhase(data.logs[0].startDate, data.logs[0].cycleLength));
+        }
       }
     } catch (e) {
       console.error("HerHealth fetchCycleData error:", e);
@@ -161,8 +165,9 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setSavingLog(true);
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/patient/cycle-log", {
+      const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -170,13 +175,16 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
           periodDuration: Number(periodDuration), flow, symptoms: selectedSymptoms, notes: cycleNotes
         })
       });
-      const data = await res.json();
-      if (data.log) {
-        setLogs(prev => [data.log, ...prev]);
-        setPrediction(data.prediction);
-        setCurrentPhase(calculateCurrentPhase(startDate, cycleLength));
-        setSelectedSymptoms([]);
-        setCycleNotes("");
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.log) {
+          setLogs(prev => [data.log, ...prev]);
+          setPrediction(data.prediction);
+          setCurrentPhase(calculateCurrentPhase(startDate, cycleLength));
+          setSelectedSymptoms([]);
+          setCycleNotes("");
+        }
       }
     } catch {
       alert("Could not save cycle log. Please try again.");
@@ -189,14 +197,18 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setRunningScreen(true);
     try {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
       const token = localStorage.getItem("medico_token");
-      const res = await fetch("/api/patient/pcos-screening", {
+      const res = await fetch(`${API_BASE}/api/patient/pcos-screening`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ irregularCycles, acneSeverity, hairGrowth, weightFluctuations, moodSwings, symptomsList: selectedSymptoms })
       });
-      const data = await res.json();
-      if (data.screening) setScreeningResult(data.screening);
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.screening) setScreeningResult(data.screening);
+      }
     } catch {
       alert("Screening failed. Please check your connection.");
     } finally {
@@ -214,7 +226,8 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     setChatLoading(true);
 
     try {
-      const res = await fetch("/api/ai/herhealth-copilot", {
+      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const res = await fetch(`${API_BASE}/api/ai/herhealth-copilot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -224,8 +237,13 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
           patientContext: `Patient: ${user?.name}, Age: ${user?.age || "adult"}, Last period start: ${logs[0]?.startDate || startDate}, Typical cycle: ${cycleLength} days.`
         })
       });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role: "assistant", text: data.response }]);
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        setMessages(prev => [...prev, { role: "assistant", text: data.response }]);
+      } else {
+        setMessages(prev => [...prev, { role: "assistant", text: "I'm having trouble connecting to the HerHealth AI agent right now." }]);
+      }
     } catch {
       setMessages(prev => [...prev, { role: "assistant", text: "I'm having trouble connecting right now. Please try again in a moment." }]);
     } finally {
