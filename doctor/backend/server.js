@@ -7,7 +7,12 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5002;
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
+app.options('*', cors());
 app.use(express.json());
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://shan01tnu_db_user:Skmoni123@cluster0.jreuwhc.mongodb.net/medico_db?retryWrites=true&w=majority";
