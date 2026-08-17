@@ -79,7 +79,14 @@ export function DoctorAuthModal({ onClose, onDoctorAuthSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        await res.text();
+        throw new Error(`Doctor server returned status ${res.status}. Please check backend connection.`);
+      }
 
       if (res.ok) {
         setPendingDoctorData(data.doctor);
@@ -105,7 +112,15 @@ export function DoctorAuthModal({ onClose, onDoctorAuthSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
+
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        await res.text();
+        throw new Error(`Doctor server returned status ${res.status}. Please check backend connection.`);
+      }
 
       if (res.ok) {
         if (data.status === "PENDING") {

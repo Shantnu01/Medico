@@ -19,7 +19,14 @@ export function AdminAuthModal({ onClose, onAdminAuthSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        await res.text();
+        throw new Error(`Admin server returned status ${res.status}. Please check backend connection.`);
+      }
 
       if (res.ok && data.status === "SUCCESS") {
         localStorage.setItem("medico_admin_token", data.token);
