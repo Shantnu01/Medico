@@ -1,10 +1,22 @@
 import streamlit as st
-import numpy as np
-import pandas as pd
-import joblib
 import json
 import os
 from pathlib import Path
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+try:
+    import joblib
+except ImportError:
+    joblib = None
 
 # Page Config
 st.set_page_config(
@@ -43,12 +55,12 @@ SYMPTOM_MODEL_PATH = ROOT / "models" / "symptom_classifier.joblib"
 def load_models():
     blood_model = None
     symptom_model = None
-    if BLOOD_MODEL_PATH.exists():
+    if joblib and BLOOD_MODEL_PATH.exists():
         try:
             blood_model = joblib.load(BLOOD_MODEL_PATH)
         except Exception as e:
             st.warning(f"Note: Blood model error: {e}")
-    if SYMPTOM_MODEL_PATH.exists():
+    if joblib and SYMPTOM_MODEL_PATH.exists():
         try:
             symptom_model = joblib.load(SYMPTOM_MODEL_PATH)
         except Exception as e:
@@ -73,12 +85,11 @@ if module == "Symptom AI Triage & NLP Classifier":
     user_input = st.text_area("Patient Symptom Description:", value=sample_query if sample_query != "Select sample..." else "", height=100)
 
     if st.button("Run AI Clinical Assessment"):
-        if not user_input.trim():
+        if not user_input.strip():
             st.error("Please enter a symptom description.")
         else:
             st.success("Intake Processed Successfully!")
 
-            # Model inference simulation / local joblib check
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric("Primary Diagnostic Match", "Acute Febrile / Cephalgia")
