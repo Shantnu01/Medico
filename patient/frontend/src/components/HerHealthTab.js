@@ -126,7 +126,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
   const fetchCycleData = async () => {
     setLoadingData(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -165,7 +165,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setSavingLog(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         method: "POST",
@@ -197,7 +197,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setRunningScreen(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/pcos-screening`, {
         method: "POST",
@@ -226,7 +226,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     setChatLoading(true);
 
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const res = await fetch(`${API_BASE}/api/ai/herhealth-copilot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

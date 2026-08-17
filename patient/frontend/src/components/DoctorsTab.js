@@ -114,7 +114,7 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
   const fetchDoctors = async () => {
     setLoading(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const url = `${API_BASE}/api/doctors?specialty=${encodeURIComponent(selectedSpecialty)}&query=${encodeURIComponent(searchQuery)}&sortBy=${sortBy}`;
       const res = await fetch(url);
       const contentType = res.headers.get("content-type") || "";
@@ -134,7 +134,7 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
   const handleStartConsultation = async (doc) => {
     const token = localStorage.getItem("medico_token");
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const res = await fetch(`${API_BASE}/api/doctors/${doc.id || doc._id}/consult`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
@@ -160,7 +160,7 @@ export function DoctorsTab({ initialSpecialty = "All" }) {
     let parsedUser = null;
     try { if (userStr) parsedUser = JSON.parse(userStr); } catch {}
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const res = await fetch(`${API_BASE}/api/appointments/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -33,7 +33,7 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
   // Fetch Doctor Prescribed Diet, Prescriptions & Alarms
   const fetchDoctorPrescriptions = async () => {
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/diet-prescription`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -62,7 +62,7 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
 
   const fetchAppointments = async () => {
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/appointments`, {
         headers: { Authorization: `Bearer ${token}` }

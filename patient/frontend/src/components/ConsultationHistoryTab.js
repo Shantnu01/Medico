@@ -14,7 +14,7 @@ export function ConsultationHistoryTab({ onNavigateToDoctors }) {
   const fetchConsultationHistory = async () => {
     setLoading(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const [resConsult, resFiles] = await Promise.all([
         fetch(`${API_BASE}/api/patient/consultations`, { headers: { Authorization: `Bearer ${token}` } }),
@@ -42,7 +42,7 @@ export function ConsultationHistoryTab({ onNavigateToDoctors }) {
   const handleAiSummarize = async () => {
     setSummarizing(true);
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/ai/summarize-medical-history`, {
         method: "POST",

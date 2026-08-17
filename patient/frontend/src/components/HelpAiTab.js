@@ -21,7 +21,7 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
   useEffect(() => {
     async function fetchRegionalDiseases() {
       try {
-        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+        const API_BASE = '';
         const res = await fetch(`${API_BASE}/api/regional-diseases?location=${encodeURIComponent(userLocation)}`);
         const contentType = res.headers.get("content-type") || "";
         if (res.ok && contentType.includes("application/json")) {
@@ -46,7 +46,7 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
     setResult(null);
 
     try {
-      const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+      const API_BASE = '';
       const res = await fetch(`${API_BASE}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
