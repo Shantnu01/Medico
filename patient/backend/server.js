@@ -324,8 +324,8 @@ async function runDynamicClinicalAI(query) {
 
 app.post('/api/predict', async (req, res) => {
   try {
-    const { features } = req.body;
-    const textQuery = Array.isArray(features) ? features.join(" ") : (features || "");
+    const { text, query, input, features } = req.body;
+    const textQuery = text || query || input || (Array.isArray(features) ? features.join(" ") : features) || "";
     const result = await runDynamicClinicalAI(textQuery);
     res.json(result);
   } catch (err) {
