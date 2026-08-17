@@ -1,0 +1,10 @@
+{
+  "name": "medico-fullstack-monorepo",
+  "version": "1.0.0",
+  "description": "Medico Full-Stack Healthcare Platform Monorepo",
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "start:ai-model": "cd ../disease_prediction && py -3.14 -m uvicorn api:app --host 127.0.0.1 --port 8000"
+  }
+}

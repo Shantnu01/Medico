@@ -1,0 +1,311 @@
+/* Carbon Health Inspired Design System (Muted Teal #338272 + Warm Gray #e6e8eb) */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Carbon Health Light Mode Tokens */
+  --color-bg: #e6e8eb;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f3f5f8;
+  --color-border: #d2d7dc;
+  --color-primary: #338272;
+  --color-primary-hover: #28695c;
+  --color-on-primary: #ffffff;
+  --color-text: #19191b;
+  --color-text-muted: #404042;
+  --color-text-heading: #19191b;
+  --color-accent: #88690c;
+  --color-input-bg: #ffffff;
+
+  --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", sans-serif;
+  --font-mono: monospace;
+
+  --radius-sm: 2px;
+  --radius-md: 8px;
+  --radius-lg: 20px;
+  --radius-xl: 40px;
+  --radius-pill: 9999px;
+
+  --shadow-subtle: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0px 8px 16px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0px 12px 24px rgba(51, 130, 114, 0.18);
+
+  --motion-duration-fast: 150ms;
+  --motion-duration-base: 300ms;
+  --motion-duration-slow: 2000ms;
+  --motion-easing: ease-in-out;
+}
+
+/* Carbon Health Dark Mode Tokens */
+[data-theme="dark"], body.dark-theme {
+  --color-bg: #0f141a;
+  --color-surface: #182029;
+  --color-surface-hover: #222c38;
+  --color-border: #293444;
+  --color-primary: #3ea995;
+  --color-primary-hover: #328f7e;
+  --color-on-primary: #0f141a;
+  --color-text: #f5f7fa;
+  --color-text-muted: #9ea8b6;
+  --color-text-heading: #ffffff;
+  --color-accent: #d4a323;
+  --color-input-bg: #1c2633;
+
+  --shadow-subtle: 0px 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0px 8px 16px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0px 12px 28px rgba(62, 169, 149, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-stack);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--motion-duration-base) var(--motion-easing), color var(--motion-duration-base) var(--motion-easing);
+}
+
+/* Form Controls with High Contrast */
+input, select, textarea {
+  font-family: var(--font-stack);
+  background-color: var(--color-input-bg);
+  color: var(--color-text-heading);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--motion-duration-fast) var(--motion-easing);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(51, 130, 114, 0.2);
+}
+
+/* Typography Hierarchy per Carbon Spec */
+.display-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text-heading);
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  .display-title {
+    font-size: 40px;
+    line-height: 1.29;
+  }
+}
+
+.heading-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-text-heading);
+}
+
+@media (min-width: 768px) {
+  .heading-title {
+    font-size: 32px;
+    line-height: 1.0;
+  }
+}
+
+.body-text {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.mono-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* App Container */
+.app-container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+/* Carbon Health Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) var(--motion-easing);
+  font-family: var(--font-stack);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(51, 130, 114, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
+  color: var(--color-text-heading);
+  transform: translateY(-1px);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+.btn-accent:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: var(--radius-md);
+}
+
+/* Carbon Health Card System */
+.sage-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: all var(--motion-duration-fast) var(--motion-easing);
+  color: var(--color-text);
+}
+
+.sage-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Carbon Health Badge System */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.02em;
+}
+
+.badge-primary {
+  background-color: rgba(51, 130, 114, 0.12);
+  color: var(--color-primary);
+  border: 1px solid rgba(51, 130, 114, 0.3);
+}
+
+[data-theme="dark"] .badge-primary {
+  background-color: rgba(62, 169, 149, 0.2);
+  color: #3ea995;
+  border: 1px solid rgba(62, 169, 149, 0.4);
+}
+
+.badge-low {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .badge-low {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+.badge-medium {
+  background-color: rgba(136, 105, 12, 0.15);
+  color: #88690c;
+  border: 1px solid rgba(136, 105, 12, 0.35);
+}
+
+[data-theme="dark"] .badge-medium {
+  background-color: rgba(212, 163, 35, 0.2);
+  color: #d4a323;
+  border: 1px solid rgba(212, 163, 35, 0.4);
+}
+
+.badge-high {
+  background-color: rgba(225, 29, 72, 0.12);
+  color: #e11d48;
+  border: 1px solid rgba(225, 29, 72, 0.3);
+}
+
+[data-theme="dark"] .badge-high {
+  background-color: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+  border: 1px solid rgba(251, 113, 133, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 300ms ease-in-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-md);
+}
