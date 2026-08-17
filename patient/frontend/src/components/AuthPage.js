@@ -15,7 +15,8 @@ export function AuthPage({ initialMode = "login", onAuthSuccess, onClose }) {
     setError("");
     setLoading(true);
 
-    const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-rushing-cello-v2ffgse.vercel.app';
+    const endpoint = `${API_BASE}${isLogin ? "/api/auth/login" : "/api/auth/signup"}`;
     const payload = isLogin ? { email, password } : { name, email, password };
 
     try {

@@ -51,6 +51,7 @@ export function DoctorAuthModal({ onClose, onDoctorAuthSuccess }) {
     setLoading(true);
     setErrorMessage("");
 
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-racing-tungsten-4lvc3tm.vercel.app';
     const payload = {
       name,
       email,
@@ -74,7 +75,7 @@ export function DoctorAuthModal({ onClose, onDoctorAuthSuccess }) {
     };
 
     try {
-      const res = await fetch("/api/doctor/register", {
+      const res = await fetch(`${API_BASE}/api/doctor/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -106,8 +107,10 @@ export function DoctorAuthModal({ onClose, onDoctorAuthSuccess }) {
     setLoading(true);
     setErrorMessage("");
 
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-racing-tungsten-4lvc3tm.vercel.app';
+
     try {
-      const res = await fetch("/api/doctor/login", {
+      const res = await fetch(`${API_BASE}/api/doctor/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
