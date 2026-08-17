@@ -87,7 +87,8 @@ function PatientManagementModal({ patient, doctorUser, onClose, onSaved }) {
     if (e && e.preventDefault) e.preventDefault();
     setDietSaving(true);
     try {
-      await fetch("/api/doctor/patient/diet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ patientId, dietPlan }) });
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
+      await fetch(`${API_BASE}/api/doctor/patient/diet`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ patientId, dietPlan }) });
       onSaved && onSaved();
       alert("Diet plan saved successfully!");
     } catch { alert("Failed to save diet plan."); }
@@ -98,7 +99,8 @@ function PatientManagementModal({ patient, doctorUser, onClose, onSaved }) {
     if (e && e.preventDefault) e.preventDefault();
     setGeneratingDiet(true);
     try {
-      const res = await fetch("/api/doctor/generate-diet", {
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
+      const res = await fetch(`${API_BASE}/api/doctor/generate-diet`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           patientId,

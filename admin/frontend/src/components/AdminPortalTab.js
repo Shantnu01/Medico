@@ -9,7 +9,8 @@ export function AdminPortalTab() {
 
   const fetchPending = async () => {
     try {
-      const res = await fetch("/api/admin/doctors/pending");
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
+      const res = await fetch(`${API_BASE}/api/admin/doctors/pending`);
       const data = await res.json();
       if (data.pendingDoctors) setPendingDoctors(data.pendingDoctors);
     } catch (e) {
@@ -19,7 +20,8 @@ export function AdminPortalTab() {
 
   const fetchActive = async () => {
     try {
-      const res = await fetch("/api/admin/doctors/active");
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
+      const res = await fetch(`${API_BASE}/api/admin/doctors/active`);
       const data = await res.json();
       if (data.activeDoctors) setActiveDoctors(data.activeDoctors);
     } catch (e) {
@@ -34,7 +36,8 @@ export function AdminPortalTab() {
 
   const handleApprove = async (docId) => {
     try {
-      const res = await fetch("/api/admin/doctors/approve", {
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
+      const res = await fetch(`${API_BASE}/api/admin/doctors/approve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ doctorId: docId })

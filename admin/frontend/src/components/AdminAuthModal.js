@@ -13,7 +13,7 @@ export function AdminAuthModal({ onClose, onAdminAuthSuccess }) {
     setLoading(true);
     setErrorMessage("");
 
-    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : 'https://temporary-snappy-mercury-swufj58.vercel.app';
+    const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
 
     try {
       const res = await fetch(`${API_BASE}/api/admin/login`, {
