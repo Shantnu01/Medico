@@ -21,7 +21,7 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
   useEffect(() => {
     async function fetchRegionalDiseases() {
       try {
-        const API_BASE = '';
+        const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
         const res = await fetch(`${API_BASE}/api/regional-diseases?location=${encodeURIComponent(userLocation)}`);
         const contentType = res.headers.get("content-type") || "";
         if (res.ok && contentType.includes("application/json")) {
@@ -46,7 +46,7 @@ export function HelpAiTab({ onNavigateToDoctors, userLocation = "Chennai, India"
     setResult(null);
 
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const res = await fetch(`${API_BASE}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

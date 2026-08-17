@@ -27,7 +27,7 @@ export default function App() {
   useEffect(() => {
     async function fetchLocation() {
       try {
-        const API_BASE = '';
+        const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
         const res = await fetch(`${API_BASE}/api/user/location`);
         const contentType = res.headers.get("content-type") || "";
         if (res.ok && contentType.includes("application/json")) {

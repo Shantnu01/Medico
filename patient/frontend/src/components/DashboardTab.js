@@ -33,7 +33,7 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
   // Fetch Doctor Prescribed Diet, Prescriptions & Alarms
   const fetchDoctorPrescriptions = async () => {
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/diet-prescription`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -62,7 +62,7 @@ export function DashboardTab({ user, onNavigate, onUpdateProfile }) {
 
   const fetchAppointments = async () => {
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/appointments`, {
         headers: { Authorization: `Bearer ${token}` }

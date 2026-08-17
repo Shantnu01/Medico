@@ -15,7 +15,7 @@ export function AuthPage({ initialMode = "login", onAuthSuccess, onClose }) {
     setError("");
     setLoading(true);
 
-    const API_BASE = '';
+    const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
     const endpoint = `${API_BASE}${isLogin ? "/api/auth/login" : "/api/auth/signup"}`;
     const payload = isLogin ? { email, password } : { name, email, password };
 

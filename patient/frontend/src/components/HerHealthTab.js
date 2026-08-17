@@ -126,7 +126,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
   const fetchCycleData = async () => {
     setLoadingData(true);
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -165,7 +165,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setSavingLog(true);
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/cycle-log`, {
         method: "POST",
@@ -197,7 +197,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     e.preventDefault();
     setRunningScreen(true);
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const token = localStorage.getItem("medico_token");
       const res = await fetch(`${API_BASE}/api/patient/pcos-screening`, {
         method: "POST",
@@ -226,7 +226,7 @@ export function HerHealthTab({ user, onNavigateToDoctors }) {
     setChatLoading(true);
 
     try {
-      const API_BASE = '';
+      const API_BASE = import.meta.env.VITE_API_BASE || window.MEDICO_API_BASE || '';
       const res = await fetch(`${API_BASE}/api/ai/herhealth-copilot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
