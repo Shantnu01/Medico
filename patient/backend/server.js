@@ -10,29 +10,12 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://shan01tnu_db_user:Skmoni123@ac-ogkq2x0-shard-00-00.jreuwhc.mongodb.net:27017,ac-ogkq2x0-shard-00-01.jreuwhc.mongodb.net:27017,ac-ogkq2x0-shard-00-02.jreuwhc.mongodb.net:27017/medico_db?ssl=true&replicaSet=atlas-13lkha-shard-0&authSource=admin&retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://shan01tnu_db_user:Skmoni123@cluster0.jreuwhc.mongodb.net/medico_db?retryWrites=true&w=majority";
 
-mongoose.set('bufferCommands', false);
-
-let isConnected = false;
-async function connectDB() {
-  if (isConnected || mongoose.connection.readyState === 1) return;
-  try {
-    await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000, connectTimeoutMS: 5000 });
-    isConnected = true;
-    console.log('[Patient] MongoDB connected');
-  } catch (err) {
-    console.error('[Patient] MongoDB connection error:', err.message);
-  }
-}
-
-connectDB();
-
-// Middleware to ensure DB connection on serverless requests
-app.use(async (req, res, next) => {
-  await connectDB();
-  next();
-});
+mongoose.set('bufferCommands', true);
+mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 30000, connectTimeoutMS: 30000, socketTimeoutMS: 45000 })
+  .then(() => console.log('[Patient] MongoDB connected'))
+  .catch(err => console.error('[Patient] MongoDB error:', err.message));
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
