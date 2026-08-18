@@ -17,7 +17,7 @@ app.use(express.json());
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://shan01tnu_db_user:Skmoni123@cluster0.jreuwhc.mongodb.net/medico_db?retryWrites=true&w=majority";
 
-mongoose.set('bufferCommands', false);
+mongoose.set('bufferCommands', true);
 mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 3000, connectTimeoutMS: 3000, socketTimeoutMS: 5000 })
   .then(() => console.log('[Doctor] MongoDB connected'))
   .catch(err => console.error('[Doctor] MongoDB error:', err.message));
